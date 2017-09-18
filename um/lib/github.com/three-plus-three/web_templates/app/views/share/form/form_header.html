@@ -1,0 +1,3 @@
+
+<form id="{{.Id}}" action="{{default .action "#"}}" method="POST" class="{{default .cls "form-horizontal"}} {{if .validationRequired}}validation-required{{end}}">
+  <input type="hidden" name="_method" value="{{default .method "POST"}}" />

@@ -1,0 +1,7 @@
+
+
+<ul class="nav nav-tabs">
+  {{range $index, $item := .}}
+    <li class="{{if $item.active}}active{{end}}"><a data-toggle="tab" href="#{{$item.id}}" aria-expanded="false">{{$item.label}}</a></li>
+  {{end}}
+</ul>

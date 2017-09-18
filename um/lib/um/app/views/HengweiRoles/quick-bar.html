@@ -1,0 +1,17 @@
+<div class="quick-actions btn-group m-b">
+    {{if current_user_has_new_permission . "um_role"}}<a id='roles-new' href='{{url "HengweiRoles.New"}}'  class="btn btn-outline btn-default" method="" mode="*" confirm="" client="false" target="_self">
+        <i class="fa fa-add"></i>添加
+    </a>{{end}}
+    {{if current_user_has_edit_permission . "um_role"}}<a id='roles-edit' href='' url='{{url "HengweiRoles.Edit"}}'  class="btn btn-outline btn-default" method="" mode="1" confirm="" client="false" target="_self">
+        <i class="fa fa-edit"></i>编辑
+    </a>{{end}}
+    {{if current_user_has_del_permission . "um_role"}}<a id='roles-delete' href='' url='{{url "HengweiRoles.DeleteByIDs"}}'  class="btn btn-outline btn-default" mode="+" target="_self">
+        <i class="fa fa-trash"></i> 删除
+    </a>{{end}}
+    <form action="{{url "HengweiRoles.Index" 0 0}}" method="POST" id='roles-quick-form' class="btn btn-outline btn-default" style='display:inline;'>
+        <input type="text" name="query">
+        <a href="javascript:document.getElementById('roles-quick-form').submit()" >
+            <i class="fa fa-search"></i> 查询
+        </a>
+    </form>
+</div>

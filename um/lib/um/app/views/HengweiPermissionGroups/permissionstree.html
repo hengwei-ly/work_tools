@@ -1,0 +1,39 @@
+<div class="col-sm-3 b-r">
+    <div id="{{.id}}">
+        {{define "permissionnode"}}
+            <ul>
+            {{$context := .}}
+            {{range $node := .root}}
+                 <li meta-item-id="{{$node.ID}}" id="{{if $node.IsDefault}}Default:{{$node.ID}}{{else}}group:{{$node.ID}}{{end}}" {{if $context.groupID}} {{if eq $node.ID $context.groupID}}data-jstree='{"selected":true}'{{end}}{{end}}>
+                    <a href="#">{{$node.Name}}</a>
+                     {{template "permissionnode"  args | arg "root" $node.Children | arg "groupID" $context.groupID}}
+                 </li>
+            {{end}}
+            </ul>
+        {{end}}
+        <ul>
+            <li meta-item-id="0" id="group:0" class="jstree-open">
+                <a href="#">权限组</a>
+                {{template "permissionnode"  args | arg "root" .roots | arg "groupID" .groupID }}
+            </li>
+            {{if .isShowTags }}
+            <li meta-item-id="0" id="tags:0" class="jstree-open">
+                <a href="#">标签</a>
+                <ul>
+                    {{range $k,$v:= .tags}}
+                        {{if $v.Value }}
+                            <li>{{$v.Label}}</li>
+                        {{end}}
+                    {{end}}
+                </ul>
+            </li>
+            {{end}}
+        </ul>
+    </div>
+    <input hidden id="PermissionGroup_new_url" value="{{url "HengweiPermissionGroups.New" "_groupId"}}">
+    <input hidden id="PermissionGroup_edit_url" value="{{url "HengweiPermissionGroups.Edit" "_id"}}">
+    <input hidden id="PermissionGroup_delete_url" value="{{url "HengweiPermissionGroups.Delete" "_id"}}">
+    <input hidden id="PermissionGroup_index_url" value="{{url "HengweiPermissionGroups.Index"}}">
+    <input hidden id="Copy_DefaultPermissionGroups_url" value="{{url "HengweiPermissionGroups.Copy"}}">
+</div>
+

@@ -1,0 +1,18 @@
+{{set . "title" "新建角色"}}
+{{if eq .RunMode "dev"}}
+{{append . "moreScripts" "/public/js/plugins/bootbox/bootbox.js"}}
+{{else}}
+{{append . "moreScripts" "/public/js/plugins/bootbox/bootbox.min.js"}}
+{{end}}
+{{append . "moreScripts" "/self/public/js/hengwei_roles/hengwei_role.js"}}
+{{template "header_box.html" .}}
+    <form action="{{url "HengweiRoles.Create" }}" method="POST" class="form-horizontal" id="hengwei_roles-new-edit">
+    {{template "HengweiRoles/edit_fields.html" .}}
+    <div class="form-group">
+        <div class="col-lg-offset-2 col-lg-10">
+            <button type="button" class="btn btn-info controls" onclick="rolesubmitFrom()">提交</button>
+            <a href="{{url "HengweiRoles.Index" }}" class="btn btn-info controls">取消</a>
+        </div>
+    </div>
+    </form>
+{{template "footer_box.html" .}}

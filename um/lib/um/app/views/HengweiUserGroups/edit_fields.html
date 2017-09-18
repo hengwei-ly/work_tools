@@ -1,0 +1,92 @@
+{{text_field . "userGroupView.Name" "组名:"  | render}}
+{{textarea_field . "userGroupView.Description" "描述:" 3  0 |  render}}
+{{if .userGroupView.ParentID}}
+    {{hidden_field . "userGroupView.ParentID" | render}}
+{{else}}
+    <input hidden name="userGroupView.ParentID" value="{{.groupId}}">
+{{end}}
+
+<label class="col-lg-2 control-label ">已选用户:</label><br/><br/>
+<label class="col-lg-2 control-label "></label>
+<div class="col-lg-9">
+    <div class="quick-actions ">
+        <button tabindex="-1" class="btn btn-white" type="button" data-toggle="modal" data-target="#myModa2">导入</button>
+        <button tabindex="-1" class="btn btn-white" type="button" data-toggle="modal" data-target="#myModal">添加</button>
+        <button tabindex="-1" class="btn btn-white" type="button" data-toggle="modal" id="hengwei_user_groups-delect_user">删除</button>
+    </div>
+    <table class="table table-bordered table-striped table-highlight ">
+        <thead>
+        <tr>
+            <th><input type="checkbox" id="hengwei_user_groups-all-checker"></th>
+            <th>用户名</th>
+            <th>描述</th>
+        </tr>
+        </thead>
+        <tbody>
+        {{range $v := .userGroupView.Users}}
+        <tr>
+            <td>
+                <input type="checkbox" class="hengwei_user_groups-checker" key="{{$v.ID}}">
+                <input type="text" hidden name="userGroupView.UserID[]" value="{{$v.ID}}">
+            </td>
+            <td>{{$v.Name}}</a></td>
+            <td>{{$v.Description}}</td>
+        </tr>
+        {{end}}
+        </tbody>
+    </table>
+</div>
+
+<div class="modal inmodal" id="myModal" tabindex="-1" role="dialog" aria-hidden="true" data-show="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                <div class="form-group">请选择用户
+                </div>
+                <div class="col-lg-12 modal-body">
+                    <select class="form-control hengwei_user_group_allUser"  multiple="multiple" style="height:400px">
+                        {{range $v := .allHengweiUsers}}
+                        <option value="{{$v.ID}}:{{$v.Name}}:{{$v.Description}}" class="hengwei_user_group_select-{{$v.ID}}">{{$v.Name}}</option>
+                        {{end}}
+                    </select>
+                </div>
+                <div class="alert alert-info">
+                    点击时同时按Ctrl键可选择多个
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-white" data-dismiss="modal" >取消</button>
+                    <button type="button" class="btn btn-primary hengwei_group_add_user">确定</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal inmodal" id="myModa2" tabindex="-1" role="dialog" aria-hidden="true" data-show="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                <div class="form-group"><label class="col-sm-2 control-label">导入组:</label>
+                </div>
+            </div>
+            <div  style="height:400px;overflow-y:auto">
+                <div class="ibox-content ">
+                    {{if .userGroupNodes}}
+                        {{template "HengweiUserGroups/node.html" args | arg "permissionGroupNodes" .userGroupNodes |arg "groupId" .userGroupView.ID}}
+                    {{else}}
+                       <p> 没有用户组前请先创建</p>
+                    {{end}}
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-white" data-dismiss="modal">取消</button>
+                <button type="button" class="btn btn-primary hengwei_group_Import_GroupsUser">确定</button>
+                <input hidden type="text" class="permissions-Imput-checker" value="{{$.groupid}}" url="{{url "HengweiPermissionGroups.Update"}}" >
+            </div>
+        </div>
+    </div>
+</div>
+
+<input hidden id="ImportGroupUrl" value="{{url "HengweiUserGroups.ImportGroup"}}">

@@ -1,0 +1,11 @@
+{{if .noForm}}
+<div style="min-width:150px;">
+  <div id="attachUploader"></div>
+</div>
+{{else}}
+<form id="uploadForm" action="{{.uploadUrl}}">
+  <div style="min-width:150px;">
+    <div id="attachUploader"></div>
+  </div>
+</form>
+{{end}}

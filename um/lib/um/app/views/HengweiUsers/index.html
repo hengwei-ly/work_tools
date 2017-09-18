@@ -1,0 +1,142 @@
+{{$raw := .}}{{set . "title" "用户管理"}}
+{{if eq .RunMode "dev"}}
+{{append . "moreScripts" "/public/js/plugins/bootbox/bootbox.js"}}
+{{else}}
+{{append . "moreScripts" "/public/js/plugins/bootbox/bootbox.min.js"}}
+{{end}}
+{{append . "moreScripts" "/self/public/js/hengwei_users/hengwei_user.js"}}
+{{append . "moreScripts" "/public/js/plugins/footable/footable.all.min.js"}}
+{{append . "moreStyles"   "/public/css/plugins/footable/footable.core.css"}}
+{{append . "moreScripts" "/public/js/app.js"}}
+{{template "header_box.html" .}}
+    {{template "HengweiUsers/quick-bar.html" .}}
+        <table class="table table-bordered table-striped footable toggle-arrow-tiny " data-page-size="100">
+              <thead>
+              <tr>
+                  <th data-sort-ignore="true"><input type="checkbox" id="heng_wei_users-all-checker"></th>
+                  <th><nobr>用户名</nobr></th>
+                  <th><nobr>描述</nobr></th>
+                  <th><nobr>来源</nobr></th>
+                  <th><nobr>是否在线</nobr></th>
+                  <th><nobr>是否锁定</nobr></th>
+                  <th><nobr>修改时间</nobr></th>
+                  <th><nobr>创建时间</nobr></th>
+                  <th data-hide="all"></th>
+                  {{if current_user_has_write_permission $raw "um_user"}}<th>操作</th>{{end}}
+              </tr>
+              </thead>
+                {{range $v := .hengweiUsers}}
+                <tr {{if $v.LockedAt}} class="warning"{{end}}>
+                    <td>
+                        {{if or (eq $v.Source "ldap") (eq $v.Name "admin") }}
+                            <input type="checkbox" disabled="disabled" >
+                        {{else}}
+                            <input type="checkbox"  class="heng_wei_users-row-checker" key="{{$v.ID}}" url="{{url "HengweiUsers.Edit" $v.ID}}">
+                        {{end}}
+                    </td>
+                    <td>{{$v.Name}}</td>
+                    <td>{{$v.Description}}</td>
+                    <td>
+                        {{if eq $v.Source "sys"}}
+                            系统
+                        {{else if eq $v.Source "ladp"}}
+                            LADP
+                        {{else}}
+                            DB
+                        {{end}}
+                    </td>
+                    <td>
+                       {{if $.onlineUsers }}
+                           {{range $id,$va:= $.onlineUsers}}
+                                {{if eq (tostring $va.UserID) (tostring $v.ID) }}
+                                     在线
+                                {{else}}
+                                     离线
+                                {{end}}
+                           {{end}}
+                        {{else}}
+                            离线
+                        {{end}}
+                    </td>
+                    <td>
+                        {{if ne "admin" (tostring $v.Name)}}
+                            {{if $v.LockedAt}}
+                              <a title = "该用户被锁定请点击解锁 " class ="easyui-tooltip user_unlock" key="true:{{$v.ID}}"> 已锁定 &nbsp;<i class="fa fa-unlock-alt "></i></a>
+                            {{else }}
+                              <a title = "点击可将用户锁定" class = "easyui-tooltip user_unlock" key="fasle:{{$v.ID}}"> 正常 &nbsp;<i class="fa fa-unlock"></i></a>
+                            {{end}}
+                        {{else}}
+                            正常
+                        {{end}}
+                    </td>
+                    <td>{{datetime $v.CreatedAt}}</td>
+                    <td>{{datetime $v.UpdatedAt}}</td>
+                    <td>
+                        <table class="table table-stripped  m-t-md">
+                            <tbody>
+                                {{range $i,$field := $.fields}}
+                                <tr>
+                                <td class="{{if eq $i 0 }}no-borders{{else}}borders{{end}}">
+                                    <i class="fa fa-circle text-primary" >&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{$field.Name}} :&nbsp;&nbsp;&nbsp;&nbsp;</i>
+                                </td>
+                                <td class="{{if eq $i 0 }}no-borders{{else}}borders{{end}}  text-primary">
+                                    {{getString  $v.Attributes  $field.ID }}
+                                </td>
+                                </tr>
+                                {{end}}
+                                <tr>
+                                    <td class="borders text-primary">
+                                        <i class="fa fa-user-circle text-primary">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;角色:&nbsp;&nbsp;&nbsp;&nbsp;</i>
+                                    </td>
+                                    <td class="borders text-primary">
+                                        {{range $i, $vl := $v.Roles}}
+                                        <span>&nbsp;<a href='{{if current_user_has_edit_permission $raw "um_3"}}{{url "HengweiRoles.Edit" $vl.ID}}{{else}}#{{end}}'>{{$vl.Name}}</a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|</span>
+                                        {{end}}
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </td>
+                    {{if current_user_has_write_permission $raw "um_user"}}<td>
+                    {{if current_user_has_edit_permission $raw "um_user"}}<a href="{{url "HengweiUsers.Edit" $v.ID}}">编辑</a>{{end}}
+                     {{if current_user_has_del_permission $raw "um_user"}}
+                        {{if eq (tostring $v.Source) "AD"}}
+                        {{else if eq (tostring $v.Name) "admin"}}
+                        {{else}}
+                        <form id='heng_wei_users-delete-{{$v.ID}}' action="{{url "HengweiUsers.Delete" $v.ID}}" method="POST" class="form-horizontal" style='display:inline;'>
+                        <input type="hidden" name="_method" value="DELETE">
+                        <a href="javascript:document.getElementById('heng_wei_users-delete-{{$v.ID}}').submit()">
+                            <i class="icon-search"></i> 删除
+                        </a>
+                        </form>
+                        {{end}}
+                     {{end}}
+                </td>{{end}}
+                </tr>{{end}}
+            </table>
+    {{template "paginator.html" .}}
+
+<div class="modal inmodal" id="myModalUser" tabindex="-1" role="dialog" aria-hidden="true" data-show="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                <div class="form-group">以下用户不在本次同步的数据中是否删除该用户</div>
+                <div class="col-lg-12 modal-body">
+                    <select class="form-control"  multiple="multiple" style="height:400px" id="sync_AD_user_chose">
+
+                    </select>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-white" data-dismiss="modal" >取消</button>
+                    <button type="button" class="btn btn-primary " id="sync_AD_user_delete_commit">删除</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<input hidden id="sync_AD_user_url" value="{{url "HengweiUsers.SyncAD"}}">
+<input hidden id="user_unlock_url" value="{{url "HengweiUsers.UserUnlock"}}">
+{{template "footer_box.html" .}}

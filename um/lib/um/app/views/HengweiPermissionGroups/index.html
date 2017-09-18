@@ -1,0 +1,114 @@
+{{- $raw := .}}{{set . "title" "权限管理"}}
+{{- if eq .RunMode "dev"}}
+  {{- append . "moreScripts" "/public/js/plugins/bootbox/bootbox.js"}}
+{{- else}}
+  {{- append . "moreScripts" "/public/js/plugins/bootbox/bootbox.min.js"}}
+{{- end}}
+{{- append . "moreScripts" "/self/public/js/hengwei_permission_groups/hengwei_permission_group_index.js"}}
+{{- append . "moreScripts" "/self/public/js/hengwei_permission_groups/permission_group_tree.js"}}
+{{- append . "moreStyles" "/public/css/plugins/jsTree/style.min.css"}}
+{{- append . "moreScripts" "/public/js/plugins/jsTree/jstree.min.js"}}
+{{- set . "fullHeightLayout" true}}
+{{- template "header_box.html" .}}
+        {{- if .group }}
+            {{set . "groupID" .group.permissionGroup.ID}}
+        {{- end}}
+        {{template "HengweiPermissionGroups/permissionstree.html" args | arg "groupID" .groupID | arg "id" "jstree" | arg "roots" .permissionGroupNodes | arg "isShowTags" "true" | arg "tags" .tags}}
+
+        {{- if .group }}
+            <div class="col-sm-9 b">
+            <div class="form-group">
+                <label class="col-lg-1 control-label "></label>
+                {{- if not .group.permissionGroup.IsDefault }}
+                <a href="{{url "HengweiPermissionGroups.Edit" .group.permissionGroup.ID}}" class="btn btn-info pull-right">编辑</a>
+                {{- end}}
+                <div class="col-lg-12">
+                    <table class="table table-bordered table-striped table-highlight">
+                        <tr>
+                            <th>组名</th>
+                            <th>描述</th>
+                            <th>创建时间</th>
+                            <th>修改时间</th>
+                        </tr>
+                        <tr>
+                            <th>{{.group.permissionGroup.Name}}</th>
+                            <th>{{.group.permissionGroup.Description}}</th>
+                            <th>{{datetime .group.permissionGroup.CreatedAt}}</th>
+                            <th>{{datetime .group.permissionGroup.UpdatedAt}}</th>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+
+                <div class="form-group">
+                    <label class="col-lg-4 control-label ">
+                    </label>
+                    <div class="col-lg-12">
+                        <table class="table table-bordered table-striped table-highlight">
+                            <thead>
+                            <tr>
+                                <th><nobr>类型</nobr></th>
+                                <th><nobr>所属组</nobr></th>
+                                <th><nobr>名称</nobr></th>
+                                <th><nobr>描述</nobr></th>
+
+                            </tr>
+                            </thead>
+                        {{range $v := .group.permissionList}}
+                            <tr>
+                                <td>{{if eq $v.Type 0}}权限{{else}}标签{{end}}</td>
+                                <td>
+                                    {{- range $p := $v.Groups }}
+                                    <a href="{{if $p.IsDefault}}#{{else}}{{url "HengweiPermissionGroups.Edit" $p.ID}}{{end}}">{{- $p.Name}}</a>&nbsp;&nbsp;
+                                    {{- end}}
+                                </td>
+                                <td>{{$v.Name}}</td>
+                                <td>{{$v.Description}}</td>
+                            </tr>
+                        {{end}}
+                        </table>
+                    </div>
+                </div>
+                {{template "paginator.html" .}}
+        </div>
+        {{- end}}
+
+        <br style="clear:both;" />
+
+<div class="modal inmodal" id="myModal_Copy" tabindex="-1" role="dialog" aria-hidden="true" data-show="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                请选择添加的节点
+            </div>
+            <div class="col-lg-12" style="height:300px;overflow-y:auto">
+                <div class="ibox-content">
+                    <input type="text" id="permission_group_copy_id" class="form-control" style="display: none">
+                    <ul class="unstyled">
+                        <div class="form-group" >
+                            <label class="control-label " >名称:</label>
+                            <div>
+                                <input type="text" name="newGroupName" class="form-control">
+                            </div>
+                        </div>
+                        {{$context := .}}
+                        {{range $index, $p := .permissionGroupNodes}}
+                        <li>
+                            <div class="dd-handle "><input type="radio"  name="name" class="pull-right" value="{{$p.ID}}" {{if eq (tostring $p.IsDefault) "true" }} disabled="disabled" {{end}} >&nbsp;&nbsp;&nbsp;{{$p.Name}}</div>
+                            {{template "HengweiPermissionGroups/node.html" args | arg "permissionGroupNodes" $p.Children |arg "type" "radio" |arg "name" "name"|arg "isDefault" "true"}}
+                        </li>
+                        {{end}}
+                    </ul>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary " id="hengwei_permission_group_copy">确定</button>
+                <button type="button" class="btn btn-white" data-dismiss="modal" >取消</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+{{template "footer_box.html" .}}

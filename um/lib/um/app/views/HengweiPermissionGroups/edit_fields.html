@@ -1,0 +1,143 @@
+{{append . "moreScripts" "/public/js/app.js"}}
+{{append . "moreScripts" "/public/js/plugins/nestable/jquery.nestable.js"}}
+
+
+{{text_field . "permissionGroupView.Name" "组名:"  | render}}
+{{textarea_field . "permissionGroupView.Description" "描述:" 3  0 |  render}}
+
+{{select_field . "permissionGroupView.Tags[]" "权限标签:" .tags | f_addParams "data-placeholder" "请选择权限标签" | f_addTag "multiple"  |f_addClass "select_permission_tags"| render}}
+{{if .permissionGroupView.ParentID}}
+    {{hidden_field . "permissionGroupView.ParentID" | render}}
+{{else}}
+    <input hidden name="permissionGroupView.ParentID" value="{{.groupId}}">
+{{end}}
+<label class="col-lg-2 control-label ">已选择权限:</label><br/><br/>
+<label class="col-lg-2 control-label "></label>
+<div class="col-lg-9">
+    <div class="quick-actions ">
+        <button tabindex="-1" class="btn btn-white" type="button" data-toggle="modal" data-target="#myModal_add_permission">添加</button>
+        <button tabindex="-1" class="btn btn-white" type="button" data-toggle="modal" onclick="groupDeleteTaboyAllTr()">删除</button>
+    </div>
+    <table class="table table-bordered table-striped table-highlight ">
+        <thead>
+        <tr>
+            <th><input type="checkbox" id="hengwei_permissions_groups-all-checker"></th>
+            <th>权限名</th>
+            <th>描述</th>
+        </tr>
+        </thead>
+        <tbody>
+        {{range $v := .permissionGroupView.Permissions}}
+        <tr>
+            <td>
+                <input type="checkbox" class="hengwei_permissions_groups-checker" key="{{$v.ID}}">
+                <input hidden type="text" name="permissionGroupView.SelectedID[]" value="{{$v.ID}}">
+                <input type="text" hidden class="group-row-data-input" key="{{$v.ID}}:{{$v.Name}}:{{$v.Description}}">
+            </td>
+            <td>{{$v.Name}}</a></td>
+            <td>{{$v.Description}}</td>
+        </tr>
+        {{end}}
+        </tbody>
+        {{with $field := field "rolesdata" .}}
+        <div class="form-group" hidden>
+            <input type="text" id="hengwei_permissions_groups_data" name="{{$field.Name}}" value="{{$field.Flash}}"  >
+        </div>
+        {{end}}
+    </table>
+
+</div>
+
+<input hidden id="select_permission_tags_value" value="{{.permissionGroupView.SelectedTags}}">
+<input hidden id="get_permission_url" value="{{url "HengweiPermissionGroups.PermissionChoices"}}">
+<input hidden id="edit_permission_group_url" value="{{url "HengweiPermissionGroups.Edit"}}">
+<input hidden id="index_permission_group_url" value="{{url "HengweiPermissionGroups.Index"}}">
+
+<div class="modal inmodal" id="myModal_add_permission" tabindex="-1" role="dialog" aria-hidden="true" data-show="true">
+    <div class="modal-dialog" style="width:1000px">
+        <div class="modal-content">
+            <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+            <div class="form-group">请选择权限</div>
+            </div>
+            <div class="">
+                <div class="wrapper  animated fadeInRight">
+                    <div class="row" >
+                        <div style="height:450px;overflow-y:auto" class="col-lg-3 b-r">
+                        {{template "HengweiPermissionGroups/permissionstree.html" args  | arg "id" "jstree1" | arg "roots" .permissionGroupNodes }}
+                        </div>
+                        <div class="col-lg-5 b-r">
+                            <div ><a type="button" class="btn btn-white pull-right" id="permission-all-checker">全选</a></div>
+                            <br style="clear:both;" />
+                            <div style="height:400px;overflow-y:auto">
+                            <ul class="sortable-list connectList agile-list ui-sortable" id="permission_list" >
+
+                            </ul>
+                            </div>
+                        </div>
+                        <div class="col-lg-4">
+                            <div >已选择权限: <button type="button" class="btn btn-white  pull-right" id="permission-select-delete-all">全部删除</button></div>
+                            <br style="clear:both;" />
+                            <div style="height:400px;overflow-y:auto">
+                                <ul class="sortable-list connectList agile-list ui-sortable" id="permission_list_seleceted">
+                                    {{range $v := .permissionGroupView.Permissions}}
+                                        <li class="dd-handle permission_selected_{{$v.ID}}">
+                                             {{$v.Name}}
+                                            <a class="permission_selected" key="{{$v.ID}}" onclick="delectPermission(this)">
+                                                <i class="fa fa-arrow-circle-o-left pull-right"></i>
+                                            </a><input hidden="" type="text" value="{{$v.ID}}:{{$v.Name}}:{{$v.Description}}">
+                                        </li>
+                                    {{end}}
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="alert alert-info">
+                    请先选择分组 再选择分组中的权限
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary hengwei_group_add_permission">确定</button>
+                <button type="button" class="btn btn-white" data-dismiss="modal" >取消</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+<div class="modal inmodal" id="myModal_Copy" tabindex="-1" role="dialog" aria-hidden="true" data-show="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                请选择添加的节点
+            </div>
+            <div class="col-lg-12" style="height:300px;overflow-y:auto">
+                <div class="ibox-content">
+                    <input type="text" id="permission_group_copy_id" class="form-control" style="display: none">
+                    <ul class="unstyled">
+                        <div class="form-group" >
+                            <label class="control-label " >名称:</label>
+                            <div>
+                                <input type="text" name="newGroupName" class="form-control">
+                            </div>
+                        </div>
+                        {{$context := .}}
+                        {{range $index, $p := .permissionGroupNodes}}
+                        <li>
+                            <div class="dd-handle "><input type="radio"  name="name" class="pull-right" value="{{$p.ID}}" {{if eq (tostring $p.IsDefault) "true" }} disabled="disabled" {{end}} >&nbsp;&nbsp;&nbsp;{{$p.Name}}</div>
+                            {{template "HengweiPermissionGroups/node.html" args | arg "permissionGroupNodes" $p.Children |arg "type" "radio" |arg "name" "name"|arg "isDefault" "true"}}
+                        </li>
+                        {{end}}
+                    </ul>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary " id="hengwei_permission_group_copy">确定</button>
+                <button type="button" class="btn btn-white" data-dismiss="modal" >取消</button>
+            </div>
+        </div>
+    </div>
+</div>

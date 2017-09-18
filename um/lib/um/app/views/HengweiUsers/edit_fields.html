@@ -1,0 +1,89 @@
+
+{{text_field . "hengweiUser.Name" "用户名:"  | render}}
+
+{{if eq  (tostring .hengweiUser.Source)  "ldap" }}
+{{else}}
+    {{password_field . "hengweiUser.Password" "密码:"  | render}}
+{{end}}
+
+{{textarea_field . "hengweiUser.Description" "描述:" 3  0 |  render}}
+{{range $i,$field := .fields}}
+    {{if eq "white_address_list" $field.ID }}
+        <div class="form-group"><label class="col-lg-2 control-label ">{{$field.Name}}:</label>
+            <div class="col-lg-9">
+                <input type="text" hidden name="hengweiUser.Fields[{{$i}}].FieldID"  value="{{$field.ID}}">
+                <textarea name="hengweiUser.Fields[{{$i}}].Value" class="form-control" rows=""  style="height: 100px">{{getString  $.hengweiUser.Attributes  $field.ID }}</textarea>
+                <P>填写登录IP地址和IP范围(参照格式1.1.1.1或1.1.1.1-1.1.1.200)，则用户只能在指定的IP服务器上登录；默认不填则无登录限制；在网管机上登录不受限制。</P>
+            </div>
+        </div>
+    {{else}}
+    <div class="form-group"><label class="col-lg-2 control-label ">{{$field.Name}}:</label>
+        <div class="col-lg-9">
+            <input type="text" hidden name="hengweiUser.Fields[{{$i}}].FieldID"  value="{{$field.ID}}">
+            <input type="{{$field.Type}}" name="hengweiUser.Fields[{{$i}}].Value" class="form-control" value="{{getString  $.hengweiUser.Attributes  $field.ID }}">
+        </div>
+    </div>
+    {{end}}
+{{end}}
+{{hidden_field . "hengweiUser.Source" | render}}
+{{if ne "admin" (tostring $.hengweiUser.Name)}}
+<label class="col-lg-2 control-label ">已选择角色:</label><br/><br/>
+<label class="col-lg-2 control-label "></label>
+<div class="col-lg-9">
+    <div class="quick-actions ">
+        <button tabindex="-1" class="btn btn-white" type="button" data-toggle="modal" data-target="#myModal">添加</button>
+        <button tabindex="-1" class="btn btn-white" type="button" data-toggle="modal" onclick="userdeleteTaboyAllTr()">删除</button>
+    </div>
+    <table class="table table-bordered table-striped table-highlight ">
+        <thead>
+        <tr>
+            <th><input type="checkbox" id="heng_wei_users-edit-all-checker"></th>
+            <th>角色名</th>
+            <th>描述</th>
+            <th>操作</th>
+        </tr>
+        </thead>
+        <tbody>
+        {{range $vcheck := .hengweiUser.Roles}}
+        <tr>
+            <td>
+                <input type="checkbox" class="heng_wei_users—edit-row-checker" key="{{$vcheck.ID}}">
+                <input type="text" hidden class="user-row-data-input" key="{{$vcheck.ID}}:{{$vcheck.Name}}:{{$vcheck.Description}}">
+            </td>
+            <td><a href='{{url "HengweiRoles.Edit" $vcheck.ID}}'>{{$vcheck.Name}}</a></td>
+            <td>{{$vcheck.Description}}</td>
+            <td><a onclick="userdeleteTaboyOneTr($(this),{{$vcheck.ID}})">删除</a></td>
+        </tr>
+        {{end}}
+        {{with $field := field "rolesdata" .}}
+        <div class="form-group" hidden>
+            <input type="text" id="heng_wei_users_roles_data" name="{{$field.Name}}" value="{{$field.Flash}}" >
+        </div>
+        {{end}}
+        </tbody>
+    </table>
+</div>
+{{end}}
+
+
+<div class="modal inmodal" id="myModal" tabindex="-1" role="dialog" aria-hidden="true" data-show="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                <div class="form-group">请选择角色</div>
+                <div class="col-lg-12">
+                    {{select_field . "" "" .allRoles | f_addParams "data-placeholder" "请选择" |f_addTag "multiple"  | f_addData "controlWidth" "12"  |f_addCss "height" "400px"|f_addClass "heng_wei_user_select"| render}}
+                </div>
+                <br style="clear:both;" />
+                <div class="alert alert-info">
+                    点击时同时按Ctrl键可选择多个
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-white" data-dismiss="modal" >取消</button>
+                    <button type="button" class="btn btn-primary heng_wei_roles_add_group">确定</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

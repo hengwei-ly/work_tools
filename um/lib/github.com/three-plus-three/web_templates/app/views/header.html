@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <title>{{.title}}</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="{{urlPrefix "/images/favicon.ico"}}" rel="shortcut icon" />
+    <link href="{{urlPrefix "/public/css/bootstrap.min.css"}}" rel="stylesheet">
+    <link href="{{urlPrefix "/public/css/animate.css"}}" rel="stylesheet">
+    <link href="{{urlPrefix "/public/css/style.css"}}" rel="stylesheet">
+    <link href="{{urlPrefix "/public/css/style_ext.css"}}" rel="stylesheet">
+
+
+    <link href="{{urlPrefix "/public/font-awesome/css/font-awesome.min.css"}}" rel="stylesheet">
+    <link href="{{urlPrefix "/public/css/plugins/toastr/toastr.min.css"}}" rel="stylesheet">
+
+    {{- range .importStyles}}
+      <link rel="stylesheet" type="text/css" href="{{.}}">
+    {{- end}}
+    {{- range .moreStyles}}
+      <link rel="stylesheet" type="text/css" href="{{urlPrefix .}}">
+    {{- end}}
+    <script>
+      var urlPrefix = {{.global.url_root}};
+      var applicationRoot = {{.global.application_root}};
+
+      if (urlPrefix != null && 
+          urlPrefix.length >= "/".length && 
+          urlPrefix.substring(urlPrefix.length-"/".length) == "/") {
+        urlPrefix = urlPrefix.substring(0, urlPrefix.length-"/".length)
+      }
+
+      if (applicationRoot != null && 
+          applicationRoot.length >= "/".length && 
+          applicationRoot.substring(applicationRoot.length-"/".length) == "/") {
+        applicationRoot = applicationRoot.substring(0, applicationRoot.length-"/".length)
+      }
+
+      var tpt_form_callbacks = new Array();
+    </script>
+  </head>
+  <body class='{{default .fixedCls "fixed-sidebar"}} {{if .fullHeightLayout}}full-height-layout{{end}} pace-done {{if .hideSideBar}}mini-navbar{{end}}'>
+        <input type="hidden" id="urlPrefix" value="{{.global.url_root}}" />
+        <input type="hidden" id="alertAudioSetting" value="{{.global.alertAudioSetting}}" />
+        <input type="hidden" id="keepEmpty" value="false" />
+
+    <div id="wrapper">
+      {{template "nav_siderbar.html" .}}
+      <div id="page-wrapper" class="gray-bg">
+        {{template "main_top.html" .}}
+        <div class="{{if .fullHeightLayout}}fh-no-breadcrumb{{else}}wrapper wrapper-content fadeIn{{end}}">

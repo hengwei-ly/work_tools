@@ -1,0 +1,28 @@
+{{- set . "title" "新建权限组"}}
+{{- if eq .RunMode "dev"}}
+    {{- append . "moreScripts" "/public/js/plugins/bootbox/bootbox.js"}}
+{{- else}}
+    {{- append . "moreScripts" "/public/js/plugins/bootbox/bootbox.min.js"}}
+{{- end}}
+{{- append . "moreScripts" "/public/js/plugins/chosen/chosen.jquery.js"}}
+{{- append . "moreStyles" "/public/css/plugins/chosen/bootstrap-chosen.css"}}
+{{- append . "moreStyles" "/public/css/plugins/jsTree/style.min.css"}}
+{{- append . "moreScripts" "/public/js/plugins/jsTree/jstree.min.js"}}
+{{- append . "moreScripts" "/self/public/js/hengwei_permission_groups/hengwei_permission_group.js"}}
+{{- append . "moreScripts" "/self/public/js/hengwei_permission_groups/permission_group_tree.js"}}
+{{template "header_box.html" .}}
+
+    {{template "HengweiPermissionGroups/permissionstree.html" args | arg "groupID" .groupId | arg "id" "jstree" | arg "roots" .permissionGroupNodes | arg "isShowTags" "true" | arg "tags" .tags }}
+
+    <div class="col-sm-9 b">
+        <form action="{{url "HengweiPermissionGroups.Create" }}" method="POST" class="form-horizontal" id="hengwei_permissions_groups-edit">
+        {{template "HengweiPermissionGroups/edit_fields.html" .}}
+        <div class="form-group">
+            <div class="col-lg-offset-2 col-lg-10">
+                <button type="button" class="btn btn-info controls" onclick="groupsubmitFrom()">提交</button>
+                <a href="javascript:history.go(-1);" class="btn btn-info controls">取消</a>
+            </div>
+        </div>
+        </form>
+    </div>
+{{template "footer_box.html" .}}

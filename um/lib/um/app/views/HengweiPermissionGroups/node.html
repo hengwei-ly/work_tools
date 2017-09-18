@@ -1,0 +1,10 @@
+
+<ul class="unstyled">
+    {{$context := .}}
+    {{range $index, $p := .permissionGroupNodes}}
+    <li>
+    <div class="dd-handle"><input type="{{$.type}}" name="{{$.name}}" class="pull-right" value="{{$p.ID}}" key="{{$p.ID}}:{{$p.Name}}:{{$p.Description}}" {{if or (eq (tostring $p.ID) (tostring $.groupid)) (eq (tostring $p.IsDefault) (tostring $.isDefault)) }} disabled="disabled" {{end}}>&nbsp;&nbsp;&nbsp;{{$p.Name}}</div>
+    {{template "HengweiPermissionGroups/node.html" args | arg "permissionGroupNodes" $p.Children |arg "type" $.type |arg "name" $.name |arg "groupid" $.groupid | arg "isDefault" $.isDefault}}
+    </li>
+    {{end}}
+</ul>

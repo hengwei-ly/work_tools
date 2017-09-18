@@ -1,0 +1,11 @@
+
+
+<ul class="dropdown-menu">
+  {{range $index, $item := .}}
+    {{if eq $item.class "divider"}}
+      <li class="divider"></li>  
+    {{else}}
+      <li class="{{$item.class}}"><a href="#{{$item.id}}" >{{$item.label}}</a></li>
+    {{end}}
+  {{end}}
+</ul>

@@ -1,0 +1,64 @@
+{{$raw := .}}{{set . "title" "用户组管理"}}
+{{append . "moreScripts" "/self/public/js/hengwei_user_groups/hengwei_user_group.js"}}
+{{append . "moreScripts" "/public/js/plugins/jsTree/jstree.min.js"}}
+{{append . "moreStyles"  "/public/css/plugins/jsTree/style.min.css"}}
+{{template "header_box.html" .}}
+        {{template "HengweiUserGroups/tree.html" args | arg "groupID" .group.userGroup.ID | arg "id" "jstree1" | arg "roots" .userGroupNodes }}
+
+        <div class="col-sm-9 b">
+            <div class="form-group">
+            <label class="col-lg-1 control-label "></label>
+                <div class="col-lg-12">
+                    {{if .group.userGroup }}
+                        <table class="table table-bordered table-striped table-highlight">
+                            <tr>
+                                <th style="width: 100px">组名</th>
+                                <th>描述</th>
+                                <th>创建时间</th>
+                                <th>修改时间</th>
+                            </tr>
+                            <tr>
+                                <th>{{.group.userGroup.Name}}</th>
+                                <th>{{.group.userGroup.Description}}</th>
+                                <th>{{datetime .group.userGroup.CreatedAt}}</th>
+                                <th>{{datetime .group.userGroup.UpdatedAt}}</th>
+                            </tr>
+                        </table>
+                    {{end}}
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-lg-1 control-label "></label>
+                <div class="col-lg-11">
+                </div>
+                <div class="col-lg-12">
+                    <table class="table table-bordered table-striped table-highlight">
+                        <thead>
+                        <tr>
+                            <th><nobr>用户名</nobr></th>
+                            <th><nobr>描述</nobr></th>
+                            <th><nobr>所属组</nobr></th>
+                        </tr>
+                        </thead>
+                        {{range $v := .group.userList}}
+                        <tr>
+                            <td>{{$v.Name}}</td>
+                            <td>{{$v.Description}}</td>
+                            <td>
+                                {{- range $p := $v.Groups }}
+                                <a href="{{url "HengweiUserGroups.Edit" $p.ID}}">{{$p.Name}}</a>&nbsp;&nbsp;
+                                {{- end}}
+                            </td>
+                        </tr>
+                        {{end}}
+                    </table>
+                </div>
+            </div>
+            {{template "paginator.html" .paginator}}
+        </div>
+        <br style="clear:both;" />
+<input hidden id="HengweiUserGroup_new" value="{{url "HengweiUserGroups.New"}}">
+<input hidden id="HengweiUserGroup_edit" value="{{url "HengweiUserGroups.Edit"}}">
+<input hidden id="HengweiUserGroup_delete" value="{{url "HengweiUserGroups.Delete"}}">
+<input hidden id="HengweiUserGroup_group_id" value="{{.groupId}}">
+{{template "footer_box.html" .}}

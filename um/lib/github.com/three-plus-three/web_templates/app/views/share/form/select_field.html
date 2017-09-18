@@ -1,0 +1,9 @@
+
+{{- $p := .}}
+<select {{- range $v :=.tags}} {{$v}}{{end}} name="{{.name}}" class="form-control {{.cls}}" {{if .params}}{{range $k, $v :=.params}} {{$k}}="{{$v}}" {{end}}{{end -}} {{if .dataParams}}{{range $k, $v :=.dataParams}} data-{{$k}}="{{$v}}" {{end}}{{end -}}>
+  {{range $c := .choices}}
+  <option value="{{.Value}}" {{- if eq $p.value .Value}} selected{{end -}}>
+    {{raw .Label}}
+  </option>
+  {{end}}
+</select>

@@ -1,0 +1,10 @@
+- table: 'hengwei_permissions_and_roles'
+  pk:
+    id: 'PK_GENERATE(permissions_and_roles_key)'
+  fields:
+    role_id: 7680484873909879796
+    permission_id: 8159151711123375785
+    add_table: abc
+    del_table: abc
+    edit_table: abc
+    query_table: abc

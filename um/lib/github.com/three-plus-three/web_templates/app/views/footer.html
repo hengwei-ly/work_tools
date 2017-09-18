@@ -1,0 +1,93 @@
+          </div>
+        </div>
+      <div class="footer" style="position: fixed;">
+        <div class="pull-right">
+          <strong>{{if .footer_title_text}}{{.footer_title_text}}{{else}}{{.global.footer_title_text}}{{end}}</strong>
+        </div>
+        <div>
+          <!-- strong>Copyright</strong> Hengwei © 2010 -->
+          {{.global.footer_copyright_text}}
+        </div>
+      </div>
+
+      {{template "right-sidebar.html" .}}
+    </div>
+    <form id="postForm" method="POST">
+      <input type="hidden" name="_method" value="POST" />
+    </form>
+
+    <script src="{{urlPrefix "/public/js/jquery-3.1.1.min.js"}}"></script>
+    <script src="{{urlPrefix "/public/js/plugins/jquery-ui/jquery-ui.min.js"}}"></script>
+    <script src="{{urlPrefix "/public/js/bootstrap.min.js"}}"></script>
+    <script src="{{urlPrefix "/public/js/plugins/metisMenu/jquery.metisMenu.js"}}"></script>
+    <script src="{{urlPrefix "/public/js/plugins/slimscroll/jquery.slimscroll.min.js"}}"></script>
+    <script src="{{urlPrefix "/public/js/plugins/pace/pace.min.js"}}"></script>
+    <script src="{{urlPrefix "/public/js/plugins/toastr/toastr.min.js"}}"></script>
+    <script src="{{urlPrefix "/public/js/plugins/validate/jquery.validate.min.js"}}"></script>
+    <script src="{{urlPrefix "/public/js/plugins/validate/jquery.validate.additional.js"}}"></script>
+    <script src="{{urlPrefix "/public/js/plugins/validate/i18n/messages_zh.js"}}"></script>
+    <script src="{{urlPrefix "/public/js/inspinia.js"}}"></script>
+    <script src="{{urlPrefix "/public/js/inspinia_ext.js"}}"></script>
+    <script type="text/javascript">
+
+        $(function(){
+          try {
+            if (Highcharts == undefined || Highcharts == null) {
+              window.Highcharts = {
+                setOptions: function(){}
+              };
+            }
+          } catch(e) {
+            if (e instanceof ReferenceError) {
+              window.Highcharts = {
+                setOptions: function(){}
+              };
+            }
+          }
+
+          try {
+            $.fn.editable.defaults.url = '/post';
+          } catch(e) {
+            $.fn.editable = {defaults: {url: '/post'}};
+          }
+        })
+　　</script>
+
+    {{- range .importScripts}}
+    <script src="{{.}}" type="text/javascript" charset="utf-8"></script>
+    {{- end}}
+    {{- range .moreScripts}}
+    <script src="{{urlPrefix .}}" type="text/javascript" charset="utf-8"></script>
+    {{- end}}
+    <script type="text/javascript">
+      //获取到head元素　
+　　　var head=document.getElementsByTagName('head')[0];
+      var link = null;
+
+      // 动态添加 css 链接
+      {{range .moreLazyStyles}}
+        link=document.createElement('link');
+  　　　link.rel="stylesheet";
+  　　　link.href=applicationRoot + {{.}};
+  　　　head.appendChild(link);
+      {{end}}
+
+      // 动态添加 js 链接
+      {{range .moreLazyScripts}}
+        link=document.createElement('script');
+  　　　link.type="text/javascript";
+  　　　link.src=applicationRoot + {{.}};
+  　　　head.appendChild(link);
+      {{end}}
+
+　　</script>
+    <script type="text/javascript">
+      if (tpt_form_callbacks != null) {
+        for(idx in tpt_form_callbacks) {
+          tpt_form_callbacks[idx].call()
+        }
+      }
+    </script>
+
+  </body>
+</html>

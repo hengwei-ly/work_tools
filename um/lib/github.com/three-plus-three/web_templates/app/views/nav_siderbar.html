@@ -1,0 +1,54 @@
+<nav class="navbar-default navbar-static-side" role="navigation">
+  <div class="sidebar-collapse">
+    <ul class="nav metismenu" id="side-menu">
+      <li class="nav-header">
+        <div class="dropdown profile-element">
+          <span>
+              <img class="brand" src="{{urlPrefix}}/public/img/logo.png" />
+          </span>
+        </div>
+        <div class="logo-element">
+          <img style="width:40px;height:40px;" src="{{urlPrefix}}/public/img/logo.png" />
+        </div>
+      </li>
+      {{- range $menu := .menuList -}}
+        {{- if eq $menu.Title "divider"}}
+          <li class="divider"></li>
+        {{- else if current_user_has_menu $ $menu.Permission }}
+      <li class="{{if $menu.IsActiveWith $ }}active{{end}}">
+        <a href="{{$menu.URL}}">{{if $menu.Icon}}<i class="fa {{$menu.Icon}}"></i> {{end}}<span class="nav-label">{{$menu.Title}}</span>{{if $menu.Children}}<span class="fa arrow"></span>{{end}}</a>
+        {{- if $menu.Children -}}
+          <ul class="nav nav-second-level collapse">
+            {{- range $second_menu := $menu.Children}}
+              {{- if eq $second_menu.Title "divider"}}
+              <li class="divider"></li>
+              {{- else if current_user_has_menu $ $second_menu.Permission }}
+              <li class="{{if $second_menu.IsActiveWith $ }}active{{end}}">
+                <a href="{{$second_menu.URL}}"><i class="fa {{$second_menu.Icon}}"></i> <span class="nav-label">{{$second_menu.Title}}</span>{{if $second_menu.Children}}<span class="fa arrow"></span>{{end}}</a>
+                {{- if $second_menu.Children}}
+                  <ul class="nav nav-third-level collapse">
+                    {{range $third_menu := $second_menu.Children -}}
+                      {{- if eq $third_menu.Title "divider"}}
+                    <li class="divider"></li>
+                      {{- else if current_user_has_menu $ $third_menu.Permission }}
+                    <li class="{{if $third_menu.IsActiveWith $ }}active{{end}}">
+                      <a href="{{$third_menu.URL}}"><i class="fa {{$second_menu.Icon}}"></i> <span class="nav-label">{{$third_menu.Title}}</span>{{if $third_menu.Children}}<span class="fa arrow"></span>{{end}}</a>
+                    </li>
+                        {{- if $third_menu.Children}}{{$third_menu.Fail}}{{end -}}
+                      {{- end}}
+                    {{- end}}
+                  </ul>
+                {{- end}}
+              </li>
+              {{- end}}
+            {{- end}}
+          </ul>
+        {{- end}}
+      </li>
+        {{- end}}
+      {{- end}}
+
+    </ul>
+
+  </div>
+</nav>

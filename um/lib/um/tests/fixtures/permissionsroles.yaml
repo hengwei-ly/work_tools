@@ -1,0 +1,10 @@
+- table: 'tpt_permissions_and_roles'
+  pk:
+    id: 'PK_GENERATE(permission_sroles_key)'
+  fields:
+    role_id: 4788160560818928110
+    permission_id: 3069834053897796130
+    add_table: abc
+    delet_table: abc
+    edit_table: abc
+    query_table: abc

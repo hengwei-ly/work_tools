@@ -1,0 +1,30 @@
+name: Permissions
+table: hengwei_permission
+fields:
+- name: id
+  description: ID
+  label: ID
+  type: biginteger
+  required: true
+  readonly: true
+  unique: true
+- name: name
+  description: 权限名
+  label: 权限名
+  type: string
+  required: true
+  restrictions:
+    maxlength: 250
+- name: created_at
+  description: 创建时间
+  label: 创建时间
+  type: datetime
+  readonly: true
+  annotations:
+    editDisabled: true
+- name: updated_at
+  description: 修改时间
+  label: 修改时间
+  type: datetime
+  annotations:
+    editDisabled: true

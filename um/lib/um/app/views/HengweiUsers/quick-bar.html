@@ -1,0 +1,24 @@
+<div class="quick-actions btn-group m-b">
+    {{if current_user_has_new_permission . "um_user"}}<a id='heng_wei_users-new' href='{{url "HengweiUsers.New"}}'  class="btn btn-outline btn-default" method="" mode="*" confirm="" client="false" target="_self">
+        <i class="fa fa-add"></i>添加
+    </a>{{end}}
+    {{if current_user_has_edit_permission . "um_user"}}<a id='heng_wei_users-edit' href='#' url='{{url "HengweiUsers.Edit"}}'  class="btn btn-outline btn-default" method="" mode="1" confirm="" client="false" target="_self">
+        <i class="fa fa-edit"></i>编辑
+    </a>{{end}}
+    {{if current_user_has_del_permission . "um_user"}}<a id='heng_wei_users-delete' href='#' url='{{url "HengweiUsers.DeleteByIDs"}}'  class="btn btn-outline btn-default" mode="+" target="_self">
+        <i class="fa fa-trash"></i> 删除
+    </a>{{end}}
+    <form action="{{url "HengweiUsers.Index" 0 0}}" method="POST" id='user-quick-form' class="btn btn-outline btn-default" style='display:inline;'>
+    <input type="text" name="query">
+    <a href="javascript:document.getElementById('user-quick-form').submit()">
+        <i class="fa fa-search"></i> 查询
+    </a>
+    </form>
+</div>
+<div class="quick-actions btn-group m-b">
+    {{if current_user_has_write_permission . "um_user"}}
+    <a href="#" class="btn btn-outline btn-default" id="sync_AD_user" method="" mode="1" confirm="" client="false" target="_self">
+        <i class="fa fa-cloud-download"></i> 同步活动目录数据
+    </a>
+    {{end}}
+</div>

@@ -1,0 +1,20 @@
+{{$raw := .}}{{set . "title" "用户管理"}}
+{{template "header_box.html" .}}
+<div class="col-lg-4">
+</div>
+<div class="col-lg-4">
+    <div class="panel panel-warning">
+        <div class="panel-heading">
+            <i class="fa fa-warning"></i> 提示
+        </div>
+        <div class="panel-body">
+            <p class="text-center">你没有该操作的权限,请联系管理员!</p>
+        </div>
+        <p class="text-center"><a href="#" onClick="javascript :history.go(-1);" class="btn btn-outline btn-default " method="" mode="1" confirm="" client="false" target="_self">
+            <i class="fa fa-mail-reply-all"></i>返回
+        </a></p>
+    </div>
+</div>
+<div class="col-lg-4">
+</div>
+{{template "footer_box.html" .}}

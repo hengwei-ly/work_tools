@@ -1,0 +1,21 @@
+{{range $i,$v := .permissions}}
+    {{if $v.IsSelectedTag}}
+        <li class="dd-handle " >
+            {{$v.Name}}
+            <input hidden type="text">
+            <a href="#" ><i class="fa fa-ban pull-right">标签已选</i></a>
+        </li>
+    {{else if $v.IsSelected}}
+        <li class="dd-handle select_permission_{{$v.ID}}" >
+            {{$v.Name}}
+            <a class="permission_select" ><i class="fa fa-arrow-circle-o-right pull-right"><span class="selected_permission_{{$v.ID}}"> 已选 </span></i></a>
+            <input hidden type="text" value="{{$v.ID}}:{{$v.Name}}:{{$v.Description}}">
+        </li>
+    {{else}}
+        <li class="dd-handle select_permission_{{$v.ID}}" >
+            {{$v.Name}}
+            <a class="permission_select" ><i class="fa fa-arrow-circle-o-right pull-right"></i></a>
+            <input hidden type="text" value="{{$v.ID}}:{{$v.Name}}:{{$v.Description}}">
+        </li>
+    {{end}}
+{{end}}

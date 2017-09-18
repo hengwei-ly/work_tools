@@ -1,0 +1,37 @@
+name: PermissionsAndRoles
+table: hengwei_permissions_and_roles
+fields:
+- name: id
+  description: ID
+  label: ID
+  type: biginteger
+  required: true
+  readonly: true
+  unique: true
+- name: role_id
+  description: 角色ID
+  label:  角色ID
+  type: biginteger
+  required: true
+- name: permission_id
+  description: 权限ID
+  label: 权限ID
+  type: biginteger
+  required: true
+- name: add_table
+  description: 添加
+  label: 添加
+  type: bool
+- name: del_table
+  description: 删除
+  label: 删除
+  type: bool
+- name: edit_table
+  description: 编辑
+  label: 编辑
+  type: bool
+- name: query_table
+  description: 查询
+  label: 查询
+  type: bool
+

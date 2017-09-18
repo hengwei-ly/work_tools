@@ -1,0 +1,80 @@
+{{$raw := .}}{{set . "title" "角色管理"}}
+{{if eq .RunMode "dev"}}
+{{append . "moreScripts" "/public/js/plugins/bootbox/bootbox.js"}}
+{{else}}
+{{append . "moreScripts" "/public/js/plugins/bootbox/bootbox.min.js"}}
+{{end}}
+{{append . "moreScripts" "/self/public/js/hengwei_roles/hengwei_role.js"}}
+{{append . "moreScripts" "/public/js/plugins/footable/footable.all.min.js"}}
+{{append . "moreStyles"   "/public/css/plugins/footable/footable.core.css"}}
+{{template "header_box.html" .}}
+    {{template "HengweiRoles/quick-bar.html" .}}
+        <table class="table table-bordered table-striped table-highlight footable toggle-arrow-tiny" data-page-size="100">
+      <thead>
+      <tr>
+        <th data-sort-ignore="true"><input type="checkbox" id="roles-all-checker"></th>
+        <th><nobr>角色名</nobr></th>
+        <th><nobr>描述</nobr></th>
+        <th><nobr>创建时间</nobr></th>
+        <th><nobr>修改时间</nobr></th>
+        <th data-hide="all"></th>
+        {{if current_user_has_write_permission $raw "um_role"}}<th>操作</th>{{end}}
+      </tr>
+      </thead>
+      {{range $v := .hengweiRoles}}
+      <tr>
+        <td>
+          {{if ne $v.Name "administrator"}}
+            {{if ne $v.Name "visitor"}}
+             <input type="checkbox" class="roles-row-checker" key="{{$v.ID}}" url="{{url "HengweiRoles.Edit" $v.ID}}">
+             {{else}}
+              <input type="checkbox" disabled="disabled" >
+            {{end}}
+          {{else}}
+          <input type="checkbox" disabled="disabled" >
+          {{end}}
+        </td>
+        <td>{{$v.Name}}</td>
+        <td>{{raw $v.Description}}</td>
+        <td>{{datetime $v.CreatedAt}}</td>
+        <td>{{datetime $v.UpdatedAt}}</td>
+        <td>
+          <table class="table table-stripped  m-t-md">
+            <tbody>
+            <tr>
+              <td class="no-borders text-primary">
+
+                <i class="fa fa-archive text-primary">&nbsp;&nbsp;权限组:</i>
+                <hr class="borders">
+              </td>
+              <td class="no-borders text-primary">
+                {{range $vl := $v.Groups}}
+                <span>&nbsp;<a href='{{url "HengweiPermissionGroups.Edit" $vl.ID}}'>{{$vl.Name}}</a>&nbsp;&nbsp;&nbsp;|</span>
+                {{end}}
+                <hr class="borders">
+              </td>
+            </tr>
+            </tbody>
+          </table>
+        </td>
+        <td>
+          {{if current_user_has_write_permission $raw "um_role"}}
+            {{if ne $v.Name "administrator"}}
+              {{if ne $v.Name "visitor"}}
+                {{if current_user_has_edit_permission $raw "um_role"}}<a href='{{url "HengweiRoles.Edit" $v.ID}}'>编辑</a>{{end}}
+                {{if current_user_has_del_permission $raw "um_role"}}<form id='roles-delete-{{$v.ID}}' action="{{url "HengweiRoles.Delete" $v.ID}}" method="POST" class="form-horizontal" style='display:inline;'>
+                  <input type="hidden" name="_method" value="DELETE">
+                  <input type="hidden" name="id" value="{{$v.ID}}">
+                    <a href="javascript:document.getElementById('roles-delete-{{$v.ID}}').submit()">
+                      <i class="icon-search"></i> 删除
+                    </a>
+                  </form>{{end}}
+              {{end}}
+            {{end}}
+          {{end}}
+        </td>
+      </tr>
+      {{end}}
+    </table>
+    {{template "paginator.html" .}}
+{{template "footer_box.html" .}}

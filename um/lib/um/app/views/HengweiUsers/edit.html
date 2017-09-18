@@ -1,0 +1,21 @@
+{{set . "title" "编辑用户"}}
+{{if eq .RunMode "dev"}}
+{{append . "moreScripts" "/public/js/plugins/bootbox/bootbox.js"}}
+{{else}}
+{{append . "moreScripts" "/public/js/plugins/bootbox/bootbox.min.js"}}
+{{end}}
+{{append . "moreScripts" "/self/public/js/hengwei_users/hengwei_user.js"}}
+{{template "header_box.html" .}}
+        <form action="{{url "HengweiUsers.Update" }}" method="POST" class="form-horizontal" id="hengwei_users-edit">
+        <input type="hidden" name="_method" value="PUT">
+        {{hidden_field . "hengweiUser.ID" | render}}
+        {{hidden_field . "hengweiUser.Source" | render}}
+        {{template "HengweiUsers/edit_fields.html" .}}
+        <div class="form-group">
+            <div class="col-lg-offset-2 col-lg-10">
+                <button type="button" class="btn btn-info controls" onclick="submitFrom()">修改</button>
+                <a href="{{url "HengweiUsers.Index" }}" class="btn btn-info controls">取消</a>
+            </div>
+        </div>
+        </form>
+{{template "footer_box.html" .}}

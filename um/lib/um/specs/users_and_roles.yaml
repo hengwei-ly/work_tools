@@ -1,0 +1,22 @@
+name: UsersAndRoles
+table: hengwei_users_and_roles
+fields:
+- name: id
+  description: ID
+  label: ID
+  type: biginteger
+  required: true
+  readonly: true
+  unique: true
+- name: user_id
+  description: 用户ID
+  label: 用户ID
+  type: biginteger
+  required: true
+- name: role_id
+  description: 角色ID
+  label: 角色ID
+  type: biginteger
+  required: true
+
+

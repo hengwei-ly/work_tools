@@ -1,0 +1,11 @@
+        {{if .flash.success}}<div class="alert alert-success alert-dismissable">
+            <button aria-hidden="true" data-dismiss="alert" class="close" type="button">×</button>
+            {{.flash.success}}
+          </div>{{end}}
+        {{if or .errors .flash.error}}<div class="alert alert-danger alert-dismissable">
+          <button aria-hidden="true" data-dismiss="alert" class="close" type="button">×</button>
+        	{{if .flash.error}}{{.flash.error}}{{end}}
+          {{if .errors}}<ul style="margin-top:10px;">
+        		{{range .errors}}<li>{{.}}</li>{{end}}
+        	</ul>{{end}}
+        </div>{{end}}

@@ -1,0 +1,23 @@
+<div class="input-group search-box">
+
+  {{if .matchFields}}
+    <div class="input-group-btn search-panel">
+      <input type="hidden" name="searchParam" value="{{(index .matchFields 0).Value}}">
+      <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
+        <span id="searchConcept">{{(index .matchFields 0).Label}}</span> <span class="caret"></span>
+      </button>
+      <ul class="dropdown-menu" role="menu">
+        {{range $filed := .matchFields}}
+          <li><a href="#{{$filed.Value}}">{{$filed.Label}}</a></li>
+        {{end}}
+      </ul>
+    </div>
+  {{end}}
+  <input name="searchText" type="text" class="form-control" placeholder="{{.placeholder}}">
+  <div class="input-group-btn">
+    <div class="btn-group" role="group">
+      <div class="dropdown dropdown-lg">
+        <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-expanded="true"><span class="caret"></span></button>
+        <div class="dropdown-menu dropdown-menu-right" role="menu">
+          <form class="form-horizontal search-form" role="form" action="#">
+

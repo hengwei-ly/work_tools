@@ -1,0 +1,97 @@
+{{text_field . "hengweiRole.Name" "角色名:"  | render}}
+{{text_field . "hengweiRole.Description" "描述:"  | render}}
+<label class="col-lg-2 control-label ">已选择权限组:</label><br/><br/>
+<label class="col-lg-2 control-label "></label>
+<div class="col-lg-9">
+    <div class="quick-actions ">
+        <button tabindex="-1" class="btn btn-white" type="button" data-toggle="modal" data-target="#myModal" >添加</button>
+        <button tabindex="-1" class="btn btn-white" type="button" data-toggle="modal" onclick="rolesdeleteTaboyAllTr()">删除</button>
+    </div>
+    <table class="table table-bordered table-striped table-highlight ">
+        <thead>
+        <tr>
+            <th><input type="checkbox" id="hengweiRoles-all-checker"></th>
+            <th>组名</th>
+            <th>描述</th>
+            <th>动作</th>
+            <th>操作</th>
+        </tr>
+        </thead>
+        <tbody>
+        {{range $vcheck := .hengweiRole.Groups}}
+        <tr>
+            <td>
+                <input type="checkbox" id="roles_group_id{{- $vcheck.ID}}" class="hengweiRoles-row-checker" key="{{$vcheck.ID}}:{{$vcheck.Operation}}">
+                <input type="text" hidden class="roles-row-data-input" key="{{$vcheck.ID}}:{{$vcheck.Name}}:{{$vcheck.Description}}">
+            </td>
+            <td><a href='{{url "HengweiPermissionGroups.Edit" $vcheck.ID}}'>{{$vcheck.Name}}</a></td>
+            <td>{{$vcheck.Description}}</td>
+            <td ></td>
+            <td>
+                <a onclick="openEdit($(this))">编辑</a>
+                <a onclick='deleteTaboyOneTr($(this),{{$vcheck.ID}})'>删除</a>
+            </td>
+        </tr>
+        {{end}}
+        </tbody>
+        {{with $field := field "groupdata" .}}
+        <div class="form-group" hidden>
+            <input type="text" id="heng_wei_roles_all_data" name="{{$field.Name}}" value="{{$field.Flash}}" class="form-control" >
+        </div>
+        {{end}}
+    </table>
+</div>
+
+<div class="modal inmodal" id="myModal" tabindex="-1" role="dialog" aria-hidden="true" data-show="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                <div class="form-group">请选择权限组
+                </div>
+            </div>
+            <div  style="height:400px;overflow-y:auto">
+                <div class="ibox-content ">
+                    {{template "HengweiRoles/node.html" args | arg "permissionGroupNodes" .allGroupNodes |arg "type" "checkbox" |arg "name" "selectGroup" |arg "groupid" .hengweiUserGroup.ID}}
+                </div>
+            </div>
+            <div class="modal-footer">
+                <div class="form-group"><label class="col-sm-2 control-label">操作选择</label>
+                    <div class="col-sm-5">
+                        <label class="checkbox-inline"> <input type="checkbox" value="create" id="inlineCheckbox1"> 添加 </label>
+                        <label class="checkbox-inline"><input type="checkbox" value="delete" id="inlineCheckbox2"> 删除 </label>
+                        <label class="checkbox-inline"><input type="checkbox" value="update" id="inlineCheckbox3"> 修改 </label>
+                        <label class="checkbox-inline"><input type="checkbox" value="query" id="inlineCheckbox4"> 查看 </label>
+                    </div>
+                </div>
+                <button type="button" class="btn btn-white" data-dismiss="modal" >取消</button>
+                <button type="button" class="btn btn-primary heng_wei_roles_add_group">确定</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal inmodal" id="myModal2" tabindex="-1" role="dialog" aria-hidden="true" data-show="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content ">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                <div class="form-group">请选择操作
+                </div>
+                <div class="col-lg-12 modal-body">
+                    <div class="col-sm-11">
+                        <div class="i-checks"><label> <input type="checkbox" value="create" id="inlineCheckbox5" class="hengwei_role_optaion_check"> <i></i> 添加 </label></div>
+                        <div class="i-checks"><label> <input type="checkbox" value="delete" id="inlineCheckbox6" class="hengwei_role_optaion_check"> <i></i> 删除 </label></div>
+                        <div class="i-checks"><label> <input type="checkbox" value="update" id="inlineCheckbox7" class="hengwei_role_optaion_check"> <i></i> 修改 </label></div>
+                        <div class="i-checks"><label> <input type="checkbox" value="query" id="inlineCheckbox8" class="hengwei_role_optaion_check"> <i></i> 查看 </label></div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <input type="text" hidden id="roles-row-data-edit_optaion" >
+                    <button type="button" class="btn btn-white" data-dismiss="modal" >取消</button>
+                    <button type="button" class="btn btn-primary " id="heng_wei_roles_edit_options">确定</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

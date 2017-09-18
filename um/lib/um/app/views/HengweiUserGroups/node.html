@@ -1,0 +1,10 @@
+
+<ul class="unstyled">
+    {{$context := .}}
+    {{range $index, $p := .permissionGroupNodes}}
+    <li>
+    <div class="dd-handle"><input type="checkbox"  class="pull-right user_group_import" key="{{$p.ID}}" {{if eq (tostring $p.ID) (tostring $.groupId)}} disabled="disabled" {{end}}>&nbsp;&nbsp;&nbsp;{{$p.Name}}</div>
+    {{template "HengweiUserGroups/node.html" args | arg "permissionGroupNodes" $p.Children |arg "groupId" $.groupId }}
+    </li>
+    {{end}}
+</ul>

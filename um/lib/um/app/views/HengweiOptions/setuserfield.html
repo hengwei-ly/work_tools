@@ -1,0 +1,98 @@
+{{$raw := .}}{{set . "title" "用户自定义字段"}}
+{{append . "moreStyles" "/self/public/css/app.css"}}
+{{append . "moreScripts" "/public/js/app.js"}}
+{{append . "moreScripts" "/self/public/js/hengwei_options/options.js"}}
+{{template "header_box.html" .}}
+<form action="{{url "HengweiOptions.UpdateUserField" }}" method="POST" class="form-horizontal" id="field_from" >
+    <div class="form-group">
+        <label class="col-lg-2 control-label "></label>
+        <div class="col-lg-10">
+            <div class="btn-group col-lg-7">
+                {{if current_user_has_new_permission $raw "um_set_field"}}
+                    <button tabindex="-1" class="btn  btn-info controls" type="button" data-toggle="modal" id="field_add">添加</button>
+                {{end}}
+                <br>
+                <br>
+                <table class="table table-bordered table-striped table-highlight " id="TableId">
+                    <thead>
+                    <tr>
+                        <th>字段名</th>
+                        <th>值类型</th>
+                        <th>操作</th>
+                    </tr>
+                    </thead>
+                    <tbody id="completed">
+                    {{range $i,$field:=.fields}}
+                        <tr>
+                            {{if eq "true" $field.IsDefault }}
+                                <td>{{$field.Name}}(内置字段)</td>
+                                <td>字符</td>
+                                <td>
+                                    <input hidden name="fields[{{$i}}].ID" value="{{$field.ID}}">
+                                    <input hidden class="all_fields_name" name="fields[{{$i}}].Name" value="{{$field.Name}}">
+                                    <input hidden name="fields[{{$i}}].Type" value="{{$field.Type}}">
+                                    <input hidden name="fields[{{$i}}].IsDefault" value="{{$field.IsDefault}}">
+                                </td>
+                            {{else}}
+                                <td>{{$field.Name}}</td>
+                                <td>{{if eq $field.Type "text" }} 字符{{else if eq $field.Type "number"}}数值 {{else}} 密码{{end}}</td>
+                                <td>
+                                    <a href="#" class="field_edit" onclick="userFieldEdit(this)"><i class="fa fa-edit"></i></a>
+                                    <a href="#" class="field_delete" onclick="userFieldDelect(this)"><i class="fa fa-trash"></i></a>
+                                    <input hidden name="fields[{{$i}}].ID" value="{{$field.ID}}">
+                                    <input hidden class="all_fields_name" name="fields[{{$i}}].Name" value="{{$field.Name}}">
+                                    <input hidden name="fields[{{$i}}].Type" value="{{$field.Type}}">
+                                </td>
+                            {{end}}
+                        </tr>
+                    {{end}}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="col-lg-2 control-label "></label>
+        <div class="col-lg-10 ">
+             <div class="btn-group col-lg-7">
+                 {{if current_user_has_write_permission $raw "um_set_field"}}
+                    <button type="button" class="btn btn-info controls" id="field_from_submit">保存</button>
+                 {{end}}
+             </div>
+        </div>
+    </div>
+</form>
+
+<input hidden id="current_user_has_permission" value="{{url "HengweiOptions.GetPermission"}}">
+<div id="addTextModal" class="modal fade in" tabindex="-1" role="dialog" style="display: none;">
+    <div class="modal-dialog " role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+                <h4 class="modal-title">添加字段</h4>
+            </div>
+            <div class="modal-body">
+                <form class="form-horizontal">
+                    <input hidden id="original_field_name" value="">
+                    <div class="form-group"><label class="col-lg-2 control-label ">名称:</label><div class="col-lg-9">
+                        <input type="text" name="field_name" class="form-control required " placeholder="请输入属性显示名称"></div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-lg-2 control-label ">数据类型:
+                        </label>
+                        <div class="col-lg-9"><select name="field_type" class="form-control ">
+                        <option value="text">字符型</option>
+                        <option value="number">数值</option>
+                        <option value="password">密码</option></select></div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button id="btnOk_add" type="button" class="btn btn-primary">确定</button>
+                <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+{{template "footer_box.html" .}}

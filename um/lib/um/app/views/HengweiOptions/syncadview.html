@@ -1,0 +1,35 @@
+{{$raw := .}}{{set . "title" "同步活动目录数据规则"}}
+{{append . "moreStyles" "/self/public/css/app.css"}}
+{{append . "moreScripts" "/public/js/app.js"}}
+{{append . "moreScripts" "/self/public/js/hengwei_options/syncadview.js"}}
+{{template "header_box.html" .}}
+<form action="{{url "HengweiOptions.SyncADRule" }}" method="POST" class="form-horizontal" id="sync_ad_from" >
+        {{if  .fields}}
+        {{else}}
+            <div class="alert alert-warning">
+               <p> 用户没有设置字段  请添加新字段</p>
+            </div>
+        {{end}}
+    {{range $i,$v:=.fields}}
+        <input type="hidden" name="umFields[{{$i}}].Field" class="" value="{{$v.ID}}">
+        <div class="form-group">
+            <label class="col-lg-3 control-label ">{{$v.Name}} &nbsp;&nbsp;= &gt;
+            </label>
+            <div class="col-lg-4">
+                <select name="umFields[{{$i}}].Column" class="form-control " placeholder="请选择对应的数据">
+                        {{range $in,$vu := $.adfields}}
+                                <option value="{{$vu.ID}}" {{range $ib,$vb := $.fieldBind}} {{if and (eq $v.ID $vb.Field) (eq $vu.ID $vb.Column) }}  selected="selected" {{end}} {{end}}>{{$vu.Name}}</option>
+                        {{end}}
+                </select>
+            </div>
+        </div>
+    {{end}}
+<div class="form-group">
+    <div class="col-lg-offset-2 col-lg-10">
+        {{if current_user_has_write_permission $raw "um_sync_AD"}}
+        <button type="button" class="btn btn-info controls" id="sync_ad_submit">保存</button>
+        {{end}}
+    </div>
+</div>
+</form>
+{{template "footer_box.html" .}}

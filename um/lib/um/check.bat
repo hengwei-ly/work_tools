@@ -1,0 +1,1 @@
+gometalinter.v1 --disable-all --enable=aligncheck --enable=deadcode --enable=errcheck --enable=gas --enable=gosimple  --enable=ineffassign --enable=interfacer --enable=misspell --enable=safesql --enable=staticcheck --enable=structcheck --enable=test --enable=testify --enable=unconvert --enable=varcheck --enable=vet app\controllers app\libs app\models 

@@ -1,0 +1,11 @@
+{{set . "fullHeightLayout" true}}
+{{template "header.html" .}}
+<div class="full-height">
+  <div class="ibox float-e-margins full-height">
+    <div class="ibox-title">
+      {{.title}}
+      <div class="ibox-tools"></div>
+    </div>
+    <div class="ibox-content">
+      <div class="full-height-fixed p-xs">
+        {{template "flash.html" .}}

@@ -1,0 +1,22 @@
+<div class="col-sm-3 b-r">
+    <div id="{{.id}}">
+        {{define "node"}}
+            <ul>
+            {{$context := .}}
+            {{range $node := .root}}
+                 <li meta-item-id="{{$node.ID}}" id="group:{{$node.ID}}" {{if $context.groupID}} {{if eq $node.ID $context.groupID}}data-jstree='{"selected":true}'{{end}}{{end}}>
+                    <a href="#">{{$node.Name}}</a>
+                     {{template "node"  args | arg "root" $node.Children | arg "groupID" $context.groupID}}
+                 </li>
+            {{end}}
+            </ul>
+        {{end}}
+        <ul>
+            <li meta-item-id="0" id="group:0" class="jstree-open">
+                <a href="#">用户组</a>
+                {{template "node"  args | arg "root" .roots | arg "groupID" .groupID }}
+            </li>
+        </ul>
+    </div>
+</div>
+

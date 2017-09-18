@@ -1,0 +1,179 @@
+
+
+#wrapper .brand {
+    position: relative;
+    left: 40px;
+    top: 10px;
+    width: 60px;
+    height: 60px;
+}
+
+.ibox-content > form {
+    margin-top: 10px;
+}
+
+#page-wrapper > .alert {
+    margin-top: 2px;
+    margin-bottom: 1px;
+    text-overflow: ellipsis;
+    overflow: hidden;
+}
+
+#page-wrapper > .alert + .fh-no-breadcrumb {
+    height: calc(100% - 155px);
+}
+
+.full-height-fixed {
+    position: absolute;
+    top:0;
+    left:0;
+    right:0;
+    bottom:0;
+    overflow-y: auto;
+    overflow-x: hidden;
+}
+
+.ibox-content > .full-height-fixed {
+    padding-left: 20px;
+    padding-right: 20px;
+}
+
+.ibox-content > .full-height-fixed > .quick-actions {
+    margin-left: 20px;
+}
+
+body.fixed-sidebar.mini-navbar #page-wrapper {
+    margin: 0 0 0 0;
+}
+
+.footer {
+    margin-left:220px;
+}
+
+body.fixed-sidebar.mini-navbar .footer {
+    margin: 0 0 0 70px !important;
+}
+
+.nav-header {
+    background-image: none;
+    padding: 3px 25px 20px 25px;
+}
+
+.modal-body .bootstrap-tagsinput {
+    width:100%;
+}
+
+.ibox.full-height {
+    position: relative;
+    margin-bottom: 0;
+}
+
+.ibox.full-height > .ibox-content {
+    position:absolute;
+    top: 48px;
+    bottom: 0;
+    left:0;
+    right:0;
+    padding: 6px 8px 8px 8px;
+}
+
+.full-height.content {
+    padding: 10px 10px 10px;
+}
+
+.full-height .full-height-scroll.content {
+    padding: 20px 20px 40px;
+}
+
+.fh-no-breadcrumb {
+    height: calc(100% - 100px);
+}
+
+.jqGrid-wrapper.full-height {
+    height: calc(100% - 10px);
+}
+
+/********adjust side menu******/
+
+body.fixed-sidebar.mini-navbar .navbar-static-side {
+    width: 70px;
+}
+
+body.fixed-sidebar.mini-navbar #page-wrapper {
+    margin-left: 70px;
+}
+
+body.fixed-sidebar.mini-navbar .navbar-default .nav > li > a {
+    font-size: 18px;
+    padding: 10px 10px 10px 22px;
+}
+
+body.fixed-sidebar.mini-navbar .navbar-default .nav-second-level > li > a {
+    font-size: 18px;
+    padding: 7px 5px 7px 12px;
+}
+
+body.fixed-sidebar.mini-navbar .navbar-default .nav-third-level > li > a {
+    font-size: 18px;
+    padding: 5px 5px 5px 30px;
+}
+
+body.fixed-sidebar.mini-navbar .navbar-default .metismenu.nav > li > a > span {
+    display: none;
+}
+
+
+.fixed-sidebar.mini-navbar .nav .nav-second-level {
+    position: absolute;
+    left: 70px;
+    top: 0;
+    background-color: #2f4050;
+    padding: 10px 10px 10px 10px;
+    font-size: 12px;
+}
+
+body.fixed-sidebar.mini-navbar li.active .nav-second-level {
+    left: 65px;
+}
+
+body.fixed-sidebar.mini-navbar .nav li:hover > .nav-second-level{
+    display: block;
+    border-radius: 0 2px 2px 0;
+    min-width: 210px;
+    height: auto;
+}
+
+body.fixed-sidebar.mini-navbar .nav-second-level {
+    display: none;
+}
+
+body.fixed-sidebar.mini-navbar .nav-header {
+    padding:12px 3px;
+}
+
+body.fixed-sidebar.mini-navbar #wrapper .brand {
+    left:12px;
+    top:3px;
+    width:40px;
+    height:40px;
+}
+
+body.fixed-sidebar.mini-navbar .nav-header {
+    background-color: transparent;
+}
+
+body.fixed-sidebar.mini-navbar .nav li > .nav-second-level {
+    border-radius: 0 2px 2px 0;
+    min-width: 200px;
+    height: auto;
+}
+
+
+body.fixed-sidebar.mini-navbar .sidebar-collapse {
+    position:relative;
+}
+/********adjust side menu******/
+
+.pagination {
+    margin: 0;
+}
